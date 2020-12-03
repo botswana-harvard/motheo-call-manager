@@ -18,6 +18,7 @@ class SubjectLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
                 'report_datetime',
                 'subject_fname',
                 'subject_lname',
+                'initials',
                 'subject_cell',
                 'may_call',
                 'subject_cell_alt',

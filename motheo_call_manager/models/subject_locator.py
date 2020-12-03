@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import RegexValidator
 from django.utils.safestring import mark_safe
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField, FirstnameField, LastnameField
 from edc_base.model_managers import HistoricalRecords
@@ -28,13 +29,20 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
     locator information and permission to contact.
     """
 
-    subject_fname = FirstnameField(
+    first_name = FirstnameField(
         verbose_name='First Names',
         max_length=50)
 
-    subject_lname = LastnameField(
+    last_name = LastnameField(
         verbose_name='Surname',
         max_length=50)
+
+    initials = EncryptedCharField(
+        validators=[RegexValidator(
+            regex=r'^[A-Z]{2,3}$',
+            message=('Ensure initials consist of letters '
+                     'only in upper case, no spaces.'))],
+        null=True, blank=False)
 
     report_datetime = models.DateTimeField(
         default=get_utcnow,
@@ -149,6 +157,11 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
     def natural_key(self):
         return (self.subject_identifier,)
     natural_key.dependencies = ['sites.Site']
+
+    def save(self, *args, **kwargs):
+        if not self.initials:
+            self.initials = f'{self.first_name[:1]}{self.last_name[:1]}'
+        super().save(*args, **kwargs)
 
     class Meta:
         app_label = 'motheo_call_manager'

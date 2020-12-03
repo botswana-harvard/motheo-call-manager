@@ -1,0 +1,3 @@
+include AUTHORS CHANGES README.md LICENCE
+recursive-include motheo_call_manager/templates *
+recursive-include motheo_call_manager/static *

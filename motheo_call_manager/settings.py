@@ -17,6 +17,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 APP_NAME = 'motheo_call_manager'
 
+LOGIN_REDIRECT_URL = 'home_url'
+
+INDEX_PAGE = ''
+
 ETC_DIR = '/etc'
 
 AUTO_CREATE_KEYS = False
@@ -46,8 +50,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django_crypto_fields.apps.AppConfig',
+    'edc_call_manager.apps.AppConfig',
     'edc_device.apps.AppConfig',
     'edc_model_admin.apps.AppConfig',
+    'edc_navbar.apps.AppConfig',
     'motheo_call_manager.apps.EdcBaseAppConfig',
     'motheo_call_manager.apps.EdcFacilityAppConfig',
     'motheo_call_manager.apps.EdcIdentifierAppConfig',

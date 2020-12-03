@@ -2,10 +2,10 @@ from django import forms
 from edc_base.sites import SiteModelFormMixin
 from edc_form_validators import FormValidatorMixin
 
-from ..models import SubjectLocator
+from ..models import EnrollmentChecklist
 
 
-class SubjectLocatorForm(
+class EnrollmentChecklistForm(
         SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
 
     form_validator_cls = None
@@ -15,5 +15,5 @@ class SubjectLocatorForm(
         widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
     class Meta:
-        model = SubjectLocator
+        model = EnrollmentChecklist
         fields = '__all__'
