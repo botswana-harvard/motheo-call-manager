@@ -15,9 +15,10 @@ class SubjectLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
         (None, {
             'fields': [
                 'subject_identifier',
-                'report_datetime',
-                'subject_fname',
-                'subject_lname',
+                'loc_admin',
+                'loc_date',
+                'first_name',
+                'last_name',
                 'initials',
                 'subject_cell',
                 'may_call',
@@ -25,22 +26,22 @@ class SubjectLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
                 'may_call_alt',
                 'subject_phone',
                 'may_call_tel',
-                'email_address',
+                'loc_email',
                 'may_contact_email',
-                'home_village',
-                'physical_address',
+                'loc_village',
+                'loc_address',
                 'may_visit_home',
                 'anc_clinic',
                 'may_contact_anc',
                 'idcc_clinic',
                 'may_contact_idcc',
-                'workplace',
-                'work_phone',
+                'loc_workplace',
+                'loc_workphone',
                 'may_contact_work',
-                'next_of_kin_details',
+                'loc_kincontact',
                 'loc_after_deliv',
-                'next_ap_date',
-                'locator_review'
+                'date_followup',
+                'review_locator'
             ]}
          ), audit_fieldset_tuple)
 
@@ -52,7 +53,7 @@ class SubjectLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
                     'may_contact_anc': admin.VERTICAL,
                     'may_contact_idcc': admin.VERTICAL,
                     'may_contact_work': admin.VERTICAL,
-                    'locator_review': admin.VERTICAL}
+                    'review_locator': admin.VERTICAL}
 
     search_fields = ['subject_identifier']
 

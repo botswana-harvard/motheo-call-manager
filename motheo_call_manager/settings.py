@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +24,7 @@ INDEX_PAGE = ''
 
 ETC_DIR = '/etc'
 
-AUTO_CREATE_KEYS = False
+# AUTO_CREATE_KEYS = False
 
 SITE_ID = 1
 
@@ -50,6 +51,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django_crypto_fields.apps.AppConfig',
+    'crispy_forms',
+    'rest_framework',
     'edc_call_manager.apps.AppConfig',
     'edc_device.apps.AppConfig',
     'edc_model_admin.apps.AppConfig',
@@ -105,6 +108,12 @@ DATABASES = {
     }
 }
 
+REDCAP_CONFIGURATION = {
+    'OPTIONS': {
+        'read_default_file': '/etc/motheo/redcap.conf',
+    },
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -153,3 +162,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'motheo_call_manager', 'static')
+
+
+if 'test' in sys.argv and 'mysql' not in DATABASES.get('default').get('ENGINE'):
+    MIGRATION_MODULES = {
+        "django_crypto_fields": None,
+        "edc_call_manager": None,
+        "edc_appointment": None,
+        "edc_death_report": None,
+        "edc_export": None,
+        "edc_identifier": None,
+        "edc_metadata": None,
+        "edc_rule_groups": None,
+        "edc_sync_files": None,
+        "edc_sync": None,
+        "motheo_call_manager": None}
+
+if 'test' in sys.argv:
+    PASSWORD_HASHERS = ('django_plainpasswordhasher.PlainPasswordHasher',)
+    DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'

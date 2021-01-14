@@ -10,11 +10,11 @@ fake = Faker()
 
 subjectlocator = Recipe(
     SubjectLocator,
-    report_datetime=get_utcnow(),
+    loc_date=get_utcnow(),
     first_name='Jane',
     last_name='Doe',
     initials='JD',
     may_call=YES,
     may_call_alt=YES,
     may_call_tel=YES,
-    next_ap_date=(get_utcnow() + relativedelta(months=1)).date())
+    date_followup=(get_utcnow() + relativedelta(months=1)).date())

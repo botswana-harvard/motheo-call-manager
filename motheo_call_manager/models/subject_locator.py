@@ -5,12 +5,12 @@ from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField, 
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import TelephoneNumber
-from edc_base.model_validators.date import datetime_not_future
+from edc_base.model_validators.date import date_not_future
 from edc_base.sites import SiteModelMixin
 from edc_base.utils import get_utcnow
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_identifier.model_mixins import UniqueSubjectIdentifierFieldMixin
-from edc_protocol.validators import datetime_not_before_study_start
+from edc_protocol.validators import date_not_before_study_start
 from edc_search.model_mixins import SearchSlugManager
 
 from .model_mixins import SearchSlugModelMixin
@@ -29,6 +29,10 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
     locator information and permission to contact.
     """
 
+    loc_admin = models.CharField(
+        verbose_name='Administered by',
+        max_length=50)
+
     first_name = FirstnameField(
         verbose_name='First Names',
         max_length=50)
@@ -44,9 +48,10 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
                      'only in upper case, no spaces.'))],
         null=True, blank=False)
 
-    report_datetime = models.DateTimeField(
+    loc_date = models.DateField(
+        verbose_name='Date Completed',
         default=get_utcnow,
-        validators=[datetime_not_before_study_start, datetime_not_future])
+        validators=[date_not_before_study_start, date_not_future])
 
     may_call = models.CharField(
         max_length=3,
@@ -69,7 +74,7 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
             'Has the participant given permission <b>to be contacted on this '
             'telephone number</b>?'))
 
-    email_address = models.EmailField(
+    loc_email = models.EmailField(
         blank=True,
         null=True,
         help_text='If no email, write None')
@@ -81,14 +86,23 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
             'Has the participant given permission <b>to be contacted by '
             'email</b>?'))
 
-    home_village = EncryptedTextField(
+    loc_village = EncryptedTextField(
         verbose_name='Home Village',
         max_length=500,
         help_text='')
 
+    loc_address = EncryptedTextField(
+        verbose_name='Physical address with detailed description',
+        max_length=500,
+        blank=True,
+        null=True,
+        help_text='')
+
     anc_clinic = models.CharField(
         verbose_name='Name of ANC Clinic',
-        max_length=25,)
+        max_length=25,
+        blank=True,
+        null=True)
 
     may_contact_anc = models.CharField(
         verbose_name=('Has the participant given permission to be contacted, '
@@ -108,16 +122,15 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
         max_length=3,
         choices=YES_NO_NA)
 
-    workplace = models.CharField(
+    loc_workplace = models.CharField(
         verbose_name='Name of workplace',
         max_length=25,
         blank=True,
         null=True,
         help_text='(for those who are working)')
 
-    work_phone = EncryptedCharField(
+    loc_workphone = EncryptedCharField(
         verbose_name='Work Telephone',
-        validators=[TelephoneNumber, ],
         blank=True,
         null=True)
 
@@ -127,7 +140,7 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
         max_length=3,
         choices=YES_NO_NA)
 
-    next_of_kin_details = EncryptedTextField(
+    loc_kincontact = EncryptedTextField(
         verbose_name=('Name and contact details of next of kin or any individuals '
                       'participant allows us to contact if they can\'t be reached.'
                       '(can list multiple people)'),
@@ -139,9 +152,9 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
         verbose_name='Location participant will be staying after delivery?',
         max_length=500)
 
-    next_ap_date = models.DateField(verbose_name='Date of follow-up visit')
+    date_followup = models.DateField(verbose_name='Date of follow-up visit')
 
-    locator_review = models.CharField(
+    review_locator = models.CharField(
         verbose_name=('Did you review this form with the participant to '
                       'find out if there are any updates?'),
         max_length=3,
@@ -165,4 +178,4 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
 
     class Meta:
         app_label = 'motheo_call_manager'
-        verbose_name = 'Caregiver Locator'
+        verbose_name = 'Subject Locator'

@@ -8,9 +8,9 @@ from edc_call_manager.admin_site import edc_call_manager_admin
 
 from .admin_site import motheo_call_manager_admin
 
-from .views import AdministrationView, HomeView
+from .views import AdministrationView, HomeView, TriggerView
 
-# app_name = 'motheo_call_manager'
+app_name = 'motheo_call_manager'
 
 urlpatterns = [
     path('accounts/', include('edc_base.auth.urls')),
@@ -18,16 +18,18 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('admin/', motheo_call_manager_admin.urls),
-    path('admin/edc_call_manager', edc_call_manager_admin.urls),
+    path('admin/edc_call_manager/', edc_call_manager_admin.urls),
     path('administration/', AdministrationView.as_view(),
          name='administration_url'),
 
-    path('admin/motheo_call_manager', RedirectView.as_view(url='admin/'),
+    path('admin/motheo_call_manager/', RedirectView.as_view(url='admin/'),
          name='motheo_call_manager_url'),
     path('edc_base/', include('edc_base.urls')),
     path('edc_call_manager/', include('edc_call_manager.urls')),
     path('edc_device/', include('edc_device.urls')),
     path('edc_protocol/', include('edc_protocol.urls')),
+
+    path('api/redcap_trigger_receive/', TriggerView.as_view(), name='redcap_trigger_receive'),
 
     path('switch_sites/', LogoutView.as_view(next_page=settings.INDEX_PAGE),
          name='switch_sites_url'),

@@ -8,4 +8,5 @@ from .models import SubjectLocator, SubjectOffStudy
 @register(SubjectLocator, SubjectOffStudy)
 class FollowUpModelCaller(ModelCaller):
     locator_model = SubjectLocator
+    subject_model = SubjectLocator
     interval = MONTHLY
