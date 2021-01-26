@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'rest_framework',
     'edc_call_manager.apps.AppConfig',
+    'edc_dashboard.apps.AppConfig',
     'edc_device.apps.AppConfig',
     'edc_model_admin.apps.AppConfig',
     'edc_navbar.apps.AppConfig',
@@ -181,3 +182,15 @@ if 'test' in sys.argv and 'mysql' not in DATABASES.get('default').get('ENGINE'):
 if 'test' in sys.argv:
     PASSWORD_HASHERS = ('django_plainpasswordhasher.PlainPasswordHasher',)
     DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
+
+
+DASHBOARD_URL_NAMES = {
+    'call_manager_listboard_url': 'call_manager_listboard_url',
+
+}
+
+DASHBOARD_BASE_TEMPLATES = {
+    'listboard_base_template': 'motheo_call_manager/base.html',
+    'call_manager_listboard_template': 'motheo_call_manager/listboard.html',
+}
+

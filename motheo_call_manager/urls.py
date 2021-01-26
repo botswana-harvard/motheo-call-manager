@@ -5,10 +5,11 @@ from django.contrib.auth.views import LogoutView
 from django.urls.conf import path, include
 from django.views.generic.base import RedirectView
 from edc_call_manager.admin_site import edc_call_manager_admin
+from edc_dashboard import UrlConfig
 
 from .admin_site import motheo_call_manager_admin
 
-from .views import AdministrationView, HomeView, TriggerView
+from .views import AdministrationView, HomeView, TriggerView, ListboardView
 
 app_name = 'motheo_call_manager'
 
@@ -37,4 +38,12 @@ urlpatterns = [
     path('', HomeView.as_view(), name='home_url'),
 ]
 
+call_manager_listboard_url_config = UrlConfig(
+    url_name='call_manager_listboard_url',
+    view_class=ListboardView,
+    label='call_manager_listboard',
+    identifier_label='subject_identifier',
+    identifier_pattern='')
+
+urlpatterns += call_manager_listboard_url_config.listboard_urls
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
