@@ -22,7 +22,7 @@ LOGIN_REDIRECT_URL = 'home_url'
 
 INDEX_PAGE = ''
 
-ETC_DIR = '/etc'
+ETC_DIR = '/etc/motheo/'
 
 # AUTO_CREATE_KEYS = False
 
