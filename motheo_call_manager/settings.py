@@ -37,7 +37,7 @@ SECRET_KEY = 'gc2s5qt4g7(&scfo8xqra6wrn0%a!io4)g^yp@*nwa4e1hre7_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'motheo-test.bhp.org.bw', '127.0.0.1']
 
 
 # Application definition
