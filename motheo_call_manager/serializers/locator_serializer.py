@@ -27,15 +27,13 @@ class SubjectLocatorSerializer(serializers.ModelSerializer):
                   'loc_village',
                   'loc_address',
                   'may_visit_home',
-                  'anc_clinic',
-                  'may_contact_anc',
                   'idcc_clinic',
                   'may_contact_idcc',
                   'loc_workplace',
                   'loc_workphone',
                   'may_contact_work',
                   'loc_kincontact',
-                  'loc_after_deliv',
+                  'may_contact_kin',
                   'date_followup',
                   'review_locator', )
 
@@ -43,6 +41,7 @@ class SubjectLocatorSerializer(serializers.ModelSerializer):
         """
         Create and return a new `SubjectLocator` instance, given the validated data.
         """
+        import pdb; pdb.set_trace()
         return SubjectLocator.objects.create(**validated_data)
 
     def update(self, instance, validated_data):

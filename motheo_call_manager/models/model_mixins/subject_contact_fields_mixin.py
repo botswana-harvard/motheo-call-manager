@@ -45,26 +45,22 @@ class SubjectContactFieldsMixin(models.Model):
 
     subject_cell = EncryptedCharField(
         verbose_name='Cell number',
-        validators=[CellNumber, ],
         blank=True,
         null=True,
         help_text='')
 
     subject_cell_alt = EncryptedCharField(
         verbose_name='Cell number (alternate)',
-        validators=[CellNumber, ],
         blank=True,
         null=True)
 
     subject_phone = EncryptedCharField(
         verbose_name='Telephone',
-        validators=[TelephoneNumber, ],
         blank=True,
         null=True)
 
     subject_phone_alt = EncryptedCharField(
         verbose_name='Telephone (alternate)',
-        validators=[TelephoneNumber, ],
         blank=True,
         null=True)
 

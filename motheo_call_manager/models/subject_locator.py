@@ -58,21 +58,27 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
         choices=YES_NO,
         verbose_name=mark_safe(
             'Has the participant given permission <b>to be contacted on this '
-            'cell number</b>?'))
+            'cell number</b>?'),
+        blank=True,
+        null=True)
 
     may_call_alt = models.CharField(
         max_length=3,
         choices=YES_NO,
         verbose_name=mark_safe(
             'Has the participant given permission <b>to be contacted on this '
-            'cell number</b>?'))
+            'cell number</b>?'),
+        blank=True,
+        null=True)
 
     may_call_tel = models.CharField(
         max_length=3,
         choices=YES_NO,
         verbose_name=mark_safe(
             'Has the participant given permission <b>to be contacted on this '
-            'telephone number</b>?'))
+            'telephone number</b>?'),
+        blank=True,
+        null=True)
 
     loc_email = models.EmailField(
         blank=True,
@@ -84,7 +90,9 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
         choices=YES_NO_NA,
         verbose_name=mark_safe(
             'Has the participant given permission <b>to be contacted by '
-            'email</b>?'))
+            'email</b>?'),
+        blank=True,
+        null=True)
 
     loc_village = EncryptedTextField(
         verbose_name='Home Village',
@@ -98,17 +106,14 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
         null=True,
         help_text='')
 
-    anc_clinic = models.CharField(
-        verbose_name='Name of ANC Clinic',
+    may_visit_home = models.CharField(
         max_length=25,
+        choices=YES_NO,
         blank=True,
-        null=True)
-
-    may_contact_anc = models.CharField(
-        verbose_name=('Has the participant given permission to be contacted, '
-                      'through their ANC clinic?, if unable to contact phone numbers'),
-        max_length=3,
-        choices=YES_NO)
+        null=True,
+        verbose_name=mark_safe(
+            'Has the participant given permission for study '
+            'staff <b>to make home visits</b> for follow-up purposes?'))
 
     idcc_clinic = models.CharField(
         verbose_name='Name of IDCC Clinic',
@@ -120,7 +125,9 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
         verbose_name=('Has the participant given permission to be contacted, '
                       'through their IDCC clinic?, if unable to contact phone numbers'),
         max_length=3,
-        choices=YES_NO_NA)
+        choices=YES_NO_NA,
+        blank=True,
+        null=True)
 
     loc_workplace = models.CharField(
         verbose_name='Name of workplace',
@@ -138,7 +145,9 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
         verbose_name=('Has participant given permission to be contacted at their '
                       'workplace?, if unable to contact phone numbers'),
         max_length=3,
-        choices=YES_NO_NA)
+        choices=YES_NO_NA,
+        blank=True,
+        null=True)
 
     loc_kincontact = EncryptedTextField(
         verbose_name=('Name and contact details of next of kin or any individuals '
@@ -148,9 +157,13 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
         blank=True,
         null=True)
 
-    loc_after_deliv = EncryptedTextField(
-        verbose_name='Location participant will be staying after delivery?',
-        max_length=500)
+    may_contact_kin = models.CharField(
+        verbose_name=('Has participant given permission to contact anyone else?'
+                      ' , if unable to contact phone numbers'),
+        max_length=3,
+        choices=YES_NO_NA,
+        blank=True,
+        null=True)
 
     date_followup = models.DateField(verbose_name='Date of follow-up visit')
 

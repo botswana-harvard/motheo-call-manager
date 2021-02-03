@@ -102,23 +102,30 @@ WSGI_APPLICATION = 'motheo_call_manager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-mysql_config = configparser.ConfigParser()
-mysql_config.read(os.path.join(ETC_DIR, 'mysql.ini'))
-
-HOST = mysql_config['mysql']['host']
-DB_USER = mysql_config['mysql']['user']
-DB_PASSWORD = mysql_config['mysql']['password']
-DB_NAME = mysql_config['mysql']['database']
-PORT = mysql_config['mysql']['port']
+# mysql_config = configparser.ConfigParser()
+# mysql_config.read(os.path.join(ETC_DIR, 'mysql.ini'))
+# 
+# HOST = mysql_config['mysql']['host']
+# DB_USER = mysql_config['mysql']['user']
+# DB_PASSWORD = mysql_config['mysql']['password']
+# DB_NAME = mysql_config['mysql']['database']
+# PORT = mysql_config['mysql']['port']
+# 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': DB_NAME,
+#         'USER': DB_USER,
+#         'PASSWORD': DB_PASSWORD,
+#         'HOST': HOST,   # Or an IP Address that your DB is hosted on
+#         'PORT': PORT,
+#     }
+# }
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': HOST,   # Or an IP Address that your DB is hosted on
-        'PORT': PORT,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 

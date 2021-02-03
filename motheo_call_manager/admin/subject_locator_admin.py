@@ -31,15 +31,13 @@ class SubjectLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
                 'loc_village',
                 'loc_address',
                 'may_visit_home',
-                'anc_clinic',
-                'may_contact_anc',
                 'idcc_clinic',
                 'may_contact_idcc',
                 'loc_workplace',
                 'loc_workphone',
                 'may_contact_work',
                 'loc_kincontact',
-                'loc_after_deliv',
+                'may_contact_kin',
                 'date_followup',
                 'review_locator'
             ]}
@@ -50,7 +48,6 @@ class SubjectLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
                     'may_call_tel': admin.VERTICAL,
                     'may_contact_email': admin.VERTICAL,
                     'may_visit_home': admin.VERTICAL,
-                    'may_contact_anc': admin.VERTICAL,
                     'may_contact_idcc': admin.VERTICAL,
                     'may_contact_work': admin.VERTICAL,
                     'review_locator': admin.VERTICAL}
@@ -58,3 +55,12 @@ class SubjectLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
     search_fields = ['subject_identifier']
 
     list_display = ('subject_identifier', )
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
