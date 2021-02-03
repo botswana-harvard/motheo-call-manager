@@ -41,7 +41,6 @@ class SubjectLocatorSerializer(serializers.ModelSerializer):
         """
         Create and return a new `SubjectLocator` instance, given the validated data.
         """
-        import pdb; pdb.set_trace()
         return SubjectLocator.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
