@@ -35,7 +35,6 @@ class TriggerView(APIView):
 
     def populate_locator(self, locator_data, update=False):
         if not update:
-            import pdb; pdb.set_trace()
             locator_serializer = SubjectLocatorSerializer(data=locator_data)
             if locator_serializer.is_valid():
                 locator_serializer.save()
