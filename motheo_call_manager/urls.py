@@ -10,6 +10,7 @@ from edc_dashboard import UrlConfig
 from .admin_site import motheo_call_manager_admin
 
 from .views import AdministrationView, HomeView, TriggerView, ListboardView
+from .views import ReportView
 
 app_name = 'motheo_call_manager'
 
@@ -36,6 +37,8 @@ urlpatterns = [
     path('edc_protocol/', include('edc_protocol.urls')),
 
     path('api/redcap_trigger_receive/', TriggerView.as_view(), name='redcap_trigger_receive'),
+
+    path('motheo_call_manager/reports/', ReportView.as_view(), name='report_url'),
 
     path('switch_sites/', LogoutView.as_view(next_page=settings.INDEX_PAGE),
          name='switch_sites_url'),
