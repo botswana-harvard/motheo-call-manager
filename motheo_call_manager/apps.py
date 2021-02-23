@@ -14,6 +14,9 @@ class AppConfig(DjangoAppConfig):
     verbose_name = 'Motheo Call Manager'
     admin_site_name = 'motheo_call_manager_admin'
 
+    def ready(self):
+        from .models import call_on_post_save
+
 
 class EdcBaseAppConfig(BaseEdcBaseAppConfig):
     project_name = 'Motheo Call Manager'

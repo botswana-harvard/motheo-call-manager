@@ -54,13 +54,5 @@ class SubjectLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     search_fields = ['subject_identifier']
 
-    list_display = ('subject_identifier', )
+    list_display = ('subject_identifier', 'loc_date', 'first_name', 'last_name')
 
-    def has_change_permission(self, request, obj=None):
-        return False
-
-    def has_add_permission(self, request):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False

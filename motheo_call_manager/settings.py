@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import configparser
 import os
 import sys
+from django.core.management.color import color_style
+
+style = color_style()
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,6 +27,14 @@ LOGIN_REDIRECT_URL = 'home_url'
 INDEX_PAGE = ''
 
 ETC_DIR = '/etc/motheo/'
+
+CONFIG_FILE = f'{APP_NAME}.ini'
+
+CONFIG_PATH = os.path.join(ETC_DIR, CONFIG_FILE)
+sys.stdout.write(style.SUCCESS(f'  * Reading config from {CONFIG_FILE}\n'))
+
+config = configparser.ConfigParser()
+config.read(CONFIG_PATH)
 
 # AUTO_CREATE_KEYS = False
 
@@ -51,6 +63,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django_crypto_fields.apps.AppConfig',
+    'django_q',
     'crispy_forms',
     'rest_framework',
     'edc_call_manager.apps.AppConfig',
@@ -122,6 +135,15 @@ WSGI_APPLICATION = 'motheo_call_manager.wsgi.application'
 #     }
 # }
 
+# Email configurations
+
+EMAIL_BACKEND = config['email_conf'].get('email_backend')
+EMAIL_HOST = config['email_conf'].get('email_host')
+EMAIL_USE_TLS = config['email_conf'].get('email_use_tls')
+EMAIL_PORT = config['email_conf'].get('email_port')
+EMAIL_HOST_USER = config['email_conf'].get('email_user')
+EMAIL_HOST_PASSWORD = config['email_conf'].get('email_host_pwd')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -129,10 +151,20 @@ DATABASES = {
     }
 }
 
+# REDCap API configurations
+
 REDCAP_CONFIGURATION = {
     'OPTIONS': {
         'read_default_file': '/etc/motheo/redcap.conf',
     },
+}
+
+# Django q configurations
+
+Q_CLUSTER = {
+    'name': 'motheo_call_manager',
+    'retry': 60,
+    'orm': 'default',
 }
 
 

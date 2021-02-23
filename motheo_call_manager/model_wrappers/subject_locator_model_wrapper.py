@@ -15,15 +15,15 @@ class SubjectLocatorWrapper(ModelWrapper):
 
     @property
     def call_model_cls(self):
-        return django_apps.get_model('edc_call_manager.call')
+        return django_apps.get_model('motheo_call_manager.call')
 
     @property
     def log_model_cls(self):
-        return django_apps.get_model('edc_call_manager.log')
+        return django_apps.get_model('motheo_call_manager.log')
 
     @property
     def log_entry_model_cls(self):
-        return django_apps.get_model('edc_call_manager.logentry')
+        return django_apps.get_model('motheo_call_manager.logentry')
 
     @property
     def call(self):
@@ -51,8 +51,9 @@ class SubjectLocatorWrapper(ModelWrapper):
         call = self.call_model_cls.objects.filter(
             subject_identifier=self.subject_identifier).order_by(
                 'scheduled').last()
+        subject_identifier = call.subject_identifier if call else ''
         return self.log_entry_model_cls.objects.filter(
-            log__call__subject_identifier=call.subject_identifier).order_by(
+            log__call__subject_identifier=subject_identifier).order_by(
                 'call_datetime')
 
     @property
