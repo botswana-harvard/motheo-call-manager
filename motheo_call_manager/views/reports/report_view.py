@@ -1,4 +1,4 @@
-import re
+from django.apps import apps as django_apps
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -13,6 +13,7 @@ class ReportView(NavbarViewMixin, EdcBaseViewMixin, TemplateView):
     template_name = 'motheo_call_manager/reports/call_log_entry_report.html'
     navbar_name = 'motheo_call_manager'
     navbar_selected_item = 'reports'
+    model = 'motheo_call_manager.call'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -20,4 +21,11 @@ class ReportView(NavbarViewMixin, EdcBaseViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context.update(
+            calls=self.calls)
         return context
+
+    @property
+    def calls(self):
+        call_model_cls = django_apps.get_model(self.model)
+        return call_model_cls.objects.all()
