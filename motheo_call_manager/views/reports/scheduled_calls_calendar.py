@@ -1,8 +1,9 @@
 from calendar import HTMLCalendar
+from datetime import datetime
 from ...models import Call
 
 
-class EventCalendar(HTMLCalendar):
+class ScheduledcallsCalendar(HTMLCalendar):
     def __init__(self, events=None):
         super().__init__()
         self.events = events
@@ -11,10 +12,11 @@ class EventCalendar(HTMLCalendar):
         """
         Return a day as a table cell.
         """
-        events_from_day = events.filter(call_datetime__day=day)
+        events_from_day = events.filter(scheduled__day=day)
         events_html = "<ul>"
         for event in events_from_day:
-            events_html += event.get_absolute_url() + "<br>"
+            events_html += ("<b> Names: </b> " + event.initials
+                            + "<br> <b> Status: </b> " + event.get_call_status_display())
         events_html += "</ul>"
 
         if day == 0:

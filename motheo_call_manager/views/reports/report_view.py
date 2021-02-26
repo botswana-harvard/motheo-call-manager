@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_navbar import NavbarViewMixin
-from .event_calendar import EventCalendar
+from .scheduled_calls_calendar import ScheduledcallsCalendar
 
 
 class ReportView(NavbarViewMixin, EdcBaseViewMixin, TemplateView):
@@ -65,7 +65,7 @@ class ReportView(NavbarViewMixin, EdcBaseViewMixin, TemplateView):
 #             previous_month)
 #         extra_context['next_month'] = reverse('admin:events_event_changelist') + '?day__gte=' + str(next_month)
 
-        cal = EventCalendar()
+        cal = ScheduledcallsCalendar()
         html_calendar = cal.formatmonth(d.year, d.month, withyear=True)
         html_calendar = html_calendar.replace('<td ', '<td  width="150" height="150"')
         extra_context['calendar'] = mark_safe(html_calendar)
