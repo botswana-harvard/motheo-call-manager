@@ -1,4 +1,4 @@
-from edc_call_manager.constants import DAILY
+from edc_call_manager.constants import QUARTELY
 from edc_call_manager.decorators import register
 from edc_call_manager.model_caller import ModelCaller
 
@@ -12,4 +12,4 @@ class FollowUpModelCaller(ModelCaller):
     log_entry_model = LogEntry
     locator_model = SubjectLocator
     subject_model = SubjectLocator
-    interval = DAILY
+    interval = QUARTELY

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from edc_base.utils import get_utcnow
 
 from .call_models import Call
 from ..classes import EmailSchedule
@@ -10,7 +11,7 @@ from ..classes import EmailSchedule
           dispatch_uid="call_on_post_save")
 def call_on_post_save(sender, instance, raw, created, **kwargs):
     if not raw:
-        if created:
+        if created and instance.scheduled != get_utcnow().date():
             subject_identifier = instance.subject_identifier
             subject = f'Motheo call reminder for participant: {subject_identifier}'
 

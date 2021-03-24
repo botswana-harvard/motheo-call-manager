@@ -48,13 +48,18 @@ class SubjectLocatorWrapper(ModelWrapper):
 
     @property
     def log_entries(self):
+        wrapped_entries = []
         call = self.call_model_cls.objects.filter(
             subject_identifier=self.subject_identifier).order_by(
                 'scheduled').last()
         subject_identifier = call.subject_identifier if call else ''
-        return self.log_entry_model_cls.objects.filter(
+        log_entries = self.log_entry_model_cls.objects.filter(
             log__call__subject_identifier=subject_identifier).order_by(
-                'call_datetime')
+                'call_datetime')[:3]
+        for log_entry in log_entries:
+            wrapped_entries.append(
+                LogEntryModelWrapper(log_entry))
+        return wrapped_entries
 
     @property
     def contacts(self):
@@ -70,6 +75,11 @@ class SubjectLocatorWrapper(ModelWrapper):
 
     @property
     def call_date(self):
-        latest_entry = self.log_entries.latest('call_datetime')
-        return latest_entry.call_datetime
+        call = self.call_model_cls.objects.filter(
+            subject_identifier=self.subject_identifier).order_by(
+                'scheduled').last()
+        subject_identifier = call.subject_identifier if call else ''
+        log_entry = self.log_entry_model_cls.objects.filter(
+            log__call__subject_identifier=subject_identifier).latest('call_datetime')
+        return log_entry.call_datetime
 
