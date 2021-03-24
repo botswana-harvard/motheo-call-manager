@@ -82,4 +82,3 @@ class SubjectLocatorWrapper(ModelWrapper):
         log_entry = self.log_entry_model_cls.objects.filter(
             log__call__subject_identifier=subject_identifier).latest('call_datetime')
         return log_entry.call_datetime
-
