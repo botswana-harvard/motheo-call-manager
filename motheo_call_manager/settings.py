@@ -164,6 +164,7 @@ REDCAP_CONFIGURATION = {
 Q_CLUSTER = {
     'name': 'motheo_call_manager',
     'retry': 60,
+    'timeout': 50,
     'orm': 'default',
 }
 
