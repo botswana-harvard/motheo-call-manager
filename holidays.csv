@@ -1,16 +1,16 @@
 local_date,label,country
-02/01/21,Public Holiday,botswana
-02/04/21,Good Friday,botswana
-03/04/21,Holy Saturday,botswana
-05/04/21,Easter Monday,botswana
-01/05/21,May Day/Labour Day,botswana
-13/05/21,Ascension Day,botswana
-01/07/21,Sir Seretse Khama Day,botswana
-20/07/21,President's Day,botswana
-21/07/21,Public Holiday,botswana
-30/09/21,Botswana Day,botswana
-01/10/21,Public Holiday,botswana
-25/12/21,Christmas Day,botswana
-26/12/21,Boxing Day,botswana
-27/12/21,Public Holiday,botswana
-01/01/21,New Year,botswana
+2021-01-02,Public Holiday,botswana
+2021-04-02,Good Friday,botswana
+2021-04-03,Holy Saturday,botswana
+2021-04-05,Easter Monday,botswana
+2021-05-01,May Day/Labour Day,botswana
+2021-05-13,Ascension Day,botswana
+2021-07-01,Sir Seretse Khama Day,botswana
+2021-07-20,President's Day,botswana
+2021-07-21,Public Holiday,botswana
+2021-09-30,Botswana Day,botswana
+2021-10-01,Public Holiday,botswana
+2021-12-25,Christmas Day,botswana
+2021-12-26,Boxing Day,botswana
+2021-12-27,Public Holiday,botswana
+2021-01-01,New Year,botswana
