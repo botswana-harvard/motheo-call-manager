@@ -4,7 +4,6 @@ from django.utils.safestring import mark_safe
 from django_crypto_fields.fields import EncryptedCharField, EncryptedTextField, FirstnameField, LastnameField
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
-from edc_base.model_validators import TelephoneNumber
 from edc_base.model_validators.date import date_not_future
 from edc_base.sites import SiteModelMixin
 from edc_base.utils import get_utcnow
@@ -166,6 +165,10 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
         null=True)
 
     date_followup = models.DateField(verbose_name='Date of follow-up visit')
+
+    initial_call_date = models.DateField(
+        verbose_name='Initial call date',
+        default=get_utcnow)
 
     review_locator = models.CharField(
         verbose_name=('Did you review this form with the participant to '

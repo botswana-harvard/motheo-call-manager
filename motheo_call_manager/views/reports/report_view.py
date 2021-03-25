@@ -1,8 +1,6 @@
+import calendar
 from datetime import datetime, timedelta, date
 from django.apps import apps as django_apps
-from django.contrib import admin
-import calendar
-from django.urls.base import reverse
 from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -79,7 +77,6 @@ class ReportView(NavbarViewMixin, EdcBaseViewMixin, TemplateView):
                 d = date(year=int(split_after_day[0]), month=int(split_after_day[1]), day=1)
             except:
                 d = date.today()
-
         cal = ScheduledcallsCalendar()
         html_calendar = cal.formatmonth(d.year, d.month, withyear=True)
         html_calendar = html_calendar.replace('<td ', '<td  width="150" height="150"')

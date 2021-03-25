@@ -8,6 +8,8 @@ class SubjectLocatorSerializer(serializers.ModelSerializer):
 
     date_followup = fields.DateField(input_formats=['%Y-%m-%d'])
 
+    initial_call_date = fields.DateField(input_formats=['%Y-%m-%d'])
+
     class Meta:
         model = SubjectLocator
         fields = ('subject_identifier',
@@ -35,6 +37,7 @@ class SubjectLocatorSerializer(serializers.ModelSerializer):
                   'loc_kincontact',
                   'may_contact_kin',
                   'date_followup',
+                  'initial_call_date',
                   'review_locator', )
 
     def create(self, validated_data):

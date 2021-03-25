@@ -1,5 +1,4 @@
 from calendar import HTMLCalendar
-from datetime import datetime
 from ...models import Call
 
 
@@ -13,7 +12,7 @@ class ScheduledcallsCalendar(HTMLCalendar):
         Return a day as a table cell.
         """
         events_from_day = events.filter(scheduled__day=day)
-        events_html = "<ul>"
+        events_html = "<ul style=''>"
         for event in events_from_day:
             events_html += ("<b> Names: </b> " + event.initials
                             + "<br> <b> Status: </b> " + event.get_call_status_display())
@@ -35,7 +34,7 @@ class ScheduledcallsCalendar(HTMLCalendar):
         """
         Return a formatted month as a table.
         """
-        events = Call.objects.filter(call_datetime__month=themonth)
+        events = Call.objects.filter(scheduled__month=themonth)
 
         v = []
         a = v.append

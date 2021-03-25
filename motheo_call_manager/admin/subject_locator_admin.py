@@ -39,6 +39,7 @@ class SubjectLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
                 'loc_kincontact',
                 'may_contact_kin',
                 'date_followup',
+                'initial_call_date',
                 'review_locator'
             ]}
          ), audit_fieldset_tuple)
