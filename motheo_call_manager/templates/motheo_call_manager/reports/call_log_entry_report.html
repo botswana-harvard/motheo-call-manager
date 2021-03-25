@@ -23,8 +23,6 @@
 	    	$('#call-logs').DataTable({
 	    		buttons: [ 'copy', 'excel', 'pdf' ]
 	    	});
-
-	    	document.getElementById("defaultOpen").click();
 		});
 	</script>
 {% endblock extra-scripts %}
@@ -33,16 +31,18 @@
 {% block main %}
 	<div class="row">
 		<div class="row tab" id="tab">
-			<button class="tablinks" onclick="openView(event, 'callreport')" id="defaultOpen">Reports</button>
-	 		<button class="tablinks" onclick="openView(event, 'scheduledcalls')"><i class="fa fa-calendar"></i> Scheduled Calls</button>
+			<button class="tablinks {% if is_report %} active {% endif %}" onclick="location.href='{{report_url}}?type=report'" type="button">Reports</button>
+	 		<button class="tablinks {% if is_calendar %} active {% endif %}" onclick="location.href='{{report_url}}?type=calendar'" type="button"><i class="fa fa-calendar button"></i> Scheduled Calls</button>
 		</div>
-		<div class="row tabcontent" id="callreport">
-			{% include 'motheo_call_manager/reports/reports.html' %}
-		</div>
-		<div class="row tabcontent" id="scheduledcalls">
-			{% include 'motheo_call_manager/reports/scheduled_calls.html' %}
-		</div>
+		{% if is_report %}
+			<div class="row tab-content" id="reports">
+				{% include 'motheo_call_manager/reports/reports.html' %}
+			</div>
+		{% elif is_calendar %}
+			<div class="row tab-content" id="scheduledcalls">
+				{% include 'motheo_call_manager/reports/scheduled_calls.html' %}
+			</div>
+		{% endif %}
     </div>
 
-    <script src="{% static 'motheo_call_manager/js/call_log_entry_report.js' %}"></script>
 {% endblock main %}
