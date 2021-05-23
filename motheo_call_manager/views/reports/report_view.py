@@ -81,4 +81,5 @@ class ReportView(NavbarViewMixin, EdcBaseViewMixin, TemplateView):
         html_calendar = cal.formatmonth(d.year, d.month, withyear=True)
         html_calendar = html_calendar.replace('<td ', '<td  width="150" height="150"')
         extra_context['calendar'] = mark_safe(html_calendar)
+        extra_context['month_name'] = f'{calendar.month_name[d.month]}, {d.year}'
         return extra_context

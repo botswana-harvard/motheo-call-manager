@@ -70,6 +70,11 @@ class SubjectLocator(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
         blank=True,
         null=True)
 
+    subject_cell_alt_3 = EncryptedCharField(
+        verbose_name='Cell number (second alternate)',
+        blank=True,
+        null=True)
+
     may_call_tel = models.CharField(
         max_length=3,
         choices=YES_NO,

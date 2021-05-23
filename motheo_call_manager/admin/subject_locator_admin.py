@@ -23,11 +23,13 @@ class SubjectLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
                 'subject_cell',
                 'may_call',
                 'subject_cell_alt',
+                'subject_cell_alt_3',
                 'may_call_alt',
                 'subject_phone',
                 'may_call_tel',
                 'loc_email',
                 'may_contact_email',
+                'may_sms',
                 'loc_village',
                 'loc_address',
                 'may_visit_home',
@@ -45,6 +47,7 @@ class SubjectLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
          ), audit_fieldset_tuple)
 
     radio_fields = {'may_call': admin.VERTICAL,
+                    'may_sms': admin.VERTICAL,
                     'may_call_alt': admin.VERTICAL,
                     'may_call_tel': admin.VERTICAL,
                     'may_contact_email': admin.VERTICAL,

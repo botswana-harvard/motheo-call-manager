@@ -14,8 +14,8 @@ class ScheduledcallsCalendar(HTMLCalendar):
         events_from_day = events.filter(scheduled__day=day)
         events_html = "<ul style=''>"
         for event in events_from_day:
-            events_html += ("<b> Names: </b> " + event.initials
-                            + "<br> <b> Status: </b> " + event.get_call_status_display())
+            events_html += ("<b> PID: </b> " + event.subject_identifier
+                            + "<br> <b> Initials: </b> " + event.initials + "<br>")
         events_html += "</ul>"
 
         if day == 0:
@@ -38,9 +38,7 @@ class ScheduledcallsCalendar(HTMLCalendar):
 
         v = []
         a = v.append
-        a('<table border="0" cellpadding="0" cellspacing="0" class="month">')
-        a('\n')
-        a(self.formatmonthname(theyear, themonth, withyear=withyear))
+        a('<table border="0" cellpadding="0" cellspacing="0" class="month" style="margin-left: auto;margin-right: auto;">')
         a('\n')
         a(self.formatweekheader())
         a('\n')

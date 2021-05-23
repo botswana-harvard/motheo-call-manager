@@ -23,7 +23,7 @@ def call_on_post_save(sender, instance, raw, created, **kwargs):
             message_data = ('Hi, \n \n'
                             f'Please be reminded the call to participant '
                             f'{instance.first_name} subject identifier {subject_identifier}'
-                            'is due today. \n \n'
+                            f'is due on the {instance.scheduled}. \n \n'
                             'Good day :).')
 
             users = User.objects.filter(groups__name__in=['RA'])
