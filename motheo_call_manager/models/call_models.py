@@ -1,12 +1,16 @@
 from django.db import models
 
 from edc_base.model_mixins import BaseUuidModel
+from edc_base.utils import get_utcnow
 
 from edc_call_manager.model_mixins import (
     CallModelMixin, LogModelMixin, LogEntryModelMixin)
 
 
 class Call(CallModelMixin, BaseUuidModel):
+
+    scheduled = models.DateTimeField(
+        default=get_utcnow)
 
     class Meta(CallModelMixin.Meta):
         app_label = 'motheo_call_manager'

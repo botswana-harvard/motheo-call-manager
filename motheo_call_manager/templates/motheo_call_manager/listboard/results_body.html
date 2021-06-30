@@ -23,6 +23,11 @@
 	    <td>
 	    	 {% include 'motheo_call_manager/listboard/results_body/add_call_log_entry.html' %}
 	    </td>
+	    <td>
+	    	{% with history_objects=result.home_visit_attempts title="Home Visits" history_object=result.home_visit_attempt add_button=result.home_visit_required %}
+			  	{% include 'motheo_call_manager/listboard/results_body/add_home_visit_attempt.html' %}   
+			{% endwith %}
+	    </td>
 	    <td>{{ result.call_date }}</td>
 	    <td>
 		    {% if result.log_entries %}

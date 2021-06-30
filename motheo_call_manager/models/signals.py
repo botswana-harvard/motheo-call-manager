@@ -8,7 +8,8 @@ from django.conf import settings
 from django.utils.timezone import make_aware
 from edc_base.utils import get_utcnow
 
-from .call_models import Call
+from .call_models import Call, LogEntry
+from .home_visit import HomeVisit
 from ..classes import EmailSchedule
 
 
@@ -22,9 +23,9 @@ def call_on_post_save(sender, instance, raw, created, **kwargs):
 
             message_data = ('Hi, \n \n'
                             f'Please be reminded the call to participant '
-                            f'{instance.first_name} subject identifier {subject_identifier}'
-                            f'is due on the {instance.scheduled}. \n \n'
-                            'Good day :).')
+                            f'{instance.first_name} subject identifier '
+                            f'{subject_identifier} is due on the '
+                            f'{instance.scheduled}. \n \n Good day :).')
 
             users = User.objects.filter(groups__name__in=['RA'])
             to_emails = [user.email for user in users]
@@ -35,3 +36,25 @@ def call_on_post_save(sender, instance, raw, created, **kwargs):
             schedule_datetime = make_aware(schedule_datetime, pytz.timezone(settings.TIME_ZONE))
             EmailSchedule().schedule_email(
                 subject, message_data, to_emails, schedule_datetime)
+
+
+@receiver(post_save, weak=False, sender=LogEntry,
+          dispatch_uid="log_entry_on_post_save")
+def log_entry_on_post_save(sender, instance, raw, created, **kwargs):
+    if not raw:
+        log_entries = LogEntry.objects.filter(
+            log=instance.log,
+            call_datetime__month=instance.call_datetime.month).order_by(
+                '-call_datetime')
+        if len(log_entries) > 4:
+            latest_entries = log_entries[:5]
+            if all(entry.contact_type == 'no_contact' for entry in latest_entries):
+                try:
+                    HomeVisit.objects.get(
+                        subject_identifier=instance.log.call.subject_identifier,
+                        scheduled_date__month=instance.call_datetime.month)
+                except HomeVisit.DoesNotExist:
+                    HomeVisit.objects.create(
+                        subject_identifier=instance.log.call.subject_identifier,
+                        scheduled_date=instance.call_datetime.date(),
+                        user_created=instance.user_created)

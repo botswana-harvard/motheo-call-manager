@@ -111,7 +111,7 @@ class ImportRecordInstance(object):
             if data:
                 if key in ('fields', 'records', 'forms', 'events'):
                     for i, value in enumerate(data):
-                        payload['{}[{}]'.format(key, i)] = value
+                        payload[f'{key}[{i}]'] = value
                 else:
                     payload[key] = data
 
@@ -119,7 +119,7 @@ class ImportRecordInstance(object):
         if format_key in ('json', 'csv', 'xml'):
             return response
         else:
-            raise ValueError(('Unsupported format: \'{}\'').format(format))
+            raise ValueError(f'Unsupported format: \'{format}\'')
 
     def backfill_fields(self, fields, forms):
         """
