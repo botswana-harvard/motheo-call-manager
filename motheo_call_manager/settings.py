@@ -24,7 +24,7 @@ APP_NAME = 'motheo_call_manager'
 
 LOGIN_REDIRECT_URL = 'home_url'
 
-INDEX_PAGE = ''
+INDEX_PAGE = 'motheo.bhp.org.bw'
 
 ETC_DIR = '/etc/motheo/'
 
@@ -36,8 +36,6 @@ sys.stdout.write(style.SUCCESS(f'  * Reading config from {CONFIG_FILE}\n'))
 config = configparser.ConfigParser()
 config.read(CONFIG_PATH)
 
-# AUTO_CREATE_KEYS = False
-
 SITE_ID = 1
 
 # Quick-start development settings - unsuitable for production
@@ -47,7 +45,9 @@ SITE_ID = 1
 SECRET_KEY = 'gc2s5qt4g7(&scfo8xqra6wrn0%a!io4)g^yp@*nwa4e1hre7_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+
+KEY_PATH = os.path.join(ETC_DIR, 'crypto_fields')
 
 ALLOWED_HOSTS = ['localhost', 'motheo-test.bhp.org.bw', '127.0.0.1']
 
@@ -115,25 +115,25 @@ WSGI_APPLICATION = 'motheo_call_manager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# mysql_config = configparser.ConfigParser()
-# mysql_config.read(os.path.join(ETC_DIR, 'mysql.ini'))
-# 
-# HOST = mysql_config['mysql']['host']
-# DB_USER = mysql_config['mysql']['user']
-# DB_PASSWORD = mysql_config['mysql']['password']
-# DB_NAME = mysql_config['mysql']['database']
-# PORT = mysql_config['mysql']['port']
-# 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': DB_NAME,
-#         'USER': DB_USER,
-#         'PASSWORD': DB_PASSWORD,
-#         'HOST': HOST,   # Or an IP Address that your DB is hosted on
-#         'PORT': PORT,
-#     }
-# }
+mysql_config = configparser.ConfigParser()
+mysql_config.read(os.path.join(ETC_DIR, 'mysql.ini'))
+
+HOST = mysql_config['mysql']['host']
+DB_USER = mysql_config['mysql']['user']
+DB_PASSWORD = mysql_config['mysql']['password']
+DB_NAME = mysql_config['mysql']['database']
+PORT = mysql_config['mysql']['port']
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': HOST,   # Or an IP Address that your DB is hosted on
+        'PORT': PORT,
+    }
+}
 
 # Email configurations
 
@@ -144,12 +144,12 @@ EMAIL_PORT = config['email_conf'].get('email_port')
 EMAIL_HOST_USER = config['email_conf'].get('email_user')
 EMAIL_HOST_PASSWORD = config['email_conf'].get('email_host_pwd')
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # REDCap API configurations
 
