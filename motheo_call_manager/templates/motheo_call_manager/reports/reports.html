@@ -1,0 +1,36 @@
+<div class="card">
+  	<div class="card-body">
+		<h5>Call Entry Log History</h5>
+
+	    <table id="call-logs" class="table table-striped table-bordered" cellspacing="0" width="100%">
+	        <thead>
+	            <tr>
+	                <th>Participant Name</th>
+					<th>Subject Identifier</th>
+					<th>Call Attempts</th>
+					<th>Call Status</th>
+					<th>Call Outcome</th>
+					<th>Date Called</th>
+					<th>Date Scheduled</th>
+	            </tr>
+	        </thead>
+	        <tfoot>
+	            <tr>
+	            </tr>
+	        </tfoot>
+	        <tbody>
+	        	{% for call in calls %}
+		      	<tr>
+		      		<td>{{call.first_name}}</td>
+		      		<td>{{call.subject_identifier}}</td>
+		      		<td>{{call.call_attempts}}</td>
+		      		<td>{{call.call_status}}</td>
+		      		<td>{{call.call_outcome}}</td>
+		      		<td>{{call.call_datetime}}</td>
+		      		<td>{{call.scheduled}}</td>
+		      	</tr>
+		      	{% endfor %}
+	        </tbody>
+	    </table>
+  	</div>
+</div>

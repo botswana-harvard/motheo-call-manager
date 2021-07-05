@@ -1,0 +1,67 @@
+{% extends 'motheo_call_manager/base.html' %}
+
+
+{% block extra-styles %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+<style>
+.my-card
+{
+    position:absolute;
+    left:40%;
+    top:-20px;
+    border-radius:50%;
+}
+</style>
+{% endblock extra-styles %}
+
+{% block main %}
+<div class="jumbotron">
+<div class="row w-100">
+        <div class="col-md-4">
+            <div class="card border-info mx-sm-1 p-3">
+                <div class="card border-info shadow text-info p-3 my-card" ><span  aria-hidden="true"></span></div>
+                <div class="text-info text-center mt-3"><h4>Subject Locators</h4></div>
+                <div class="text-info text-center mt-2"><h1>0</h1></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-success mx-sm-1 p-3">
+                <div class="card border-success shadow text-success p-3 my-card"><span  aria-hidden="true"></span></div>
+                <div class="text-success text-center mt-3"><h4>Calls Scheduled</h4></div>
+                <div class="text-success text-center mt-2"><h1>0</h1></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-danger mx-sm-1 p-3">
+                <div class="card border-danger shadow text-danger p-3 my-card" ><span aria-hidden="true"></span></div>
+                <div class="text-danger text-center mt-3"><h4>Total Called</h4></div>
+                <div class="text-danger text-center mt-2"><h1>0</h1></div>
+            </div>
+        </div>
+     </div>
+</div>
+<div class="row">
+
+<aside class="col-sm-4">
+<div class="card">
+	<article class="card-group-item">
+		
+	</article> <!-- card-group-item.// -->
+</div> <!-- card.// -->
+</aside> <!-- col.// -->
+
+
+<aside class="col-sm-4">
+<div class="card">
+	<article class="card-group-item">
+		<header class="card-header"><h6 class="title">Links </h6></header>
+		<div class="filter-content">
+			<div class="list-group list-group-flush">
+			  <a href="{% url 'call_manager_listboard_url' %}" class="list-group-item"><i class="fa fa-phone-square"></i> Manage Calls </a>
+			</div>  <!-- list-group .// -->
+		</div>
+	</article> <!-- card-group-item.// -->
+</div> <!-- card.// -->
+</aside> <!-- col.// -->
+
+{% endblock main %}

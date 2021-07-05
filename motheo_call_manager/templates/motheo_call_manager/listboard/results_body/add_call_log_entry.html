@@ -1,0 +1,31 @@
+
+<!-- begin add call log entry button -->
+
+<div class="btn-group">
+	<div class="btn-group">
+	  <a title="add call log entry" type="button" class="{% if result.log_entries %} btn btn-default {% else %} btn btn-warning {%endif%} btn-sm"
+	    href="{{result.log_entry.href}}">
+	      Add Call Log Entry
+	  </a>
+	</div>
+	<div class="btn-group">
+	  <button title="Call log entries" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+	      <span class="caret"></span></button>
+	      <ul class="dropdown-menu" role="menu">
+	      {% if result.log_entries %}
+	        <li class="dropdown-header">{{ title|default:"Log Entries" }}</li>
+	        {% for log_entry in result.log_entries|slice:":3" %}
+	          <li>
+	          	<a href="{{ log_entry.get_absolute_url }}?next={{ log_entry.next_url }}&{{ log_entry.querystring }}">
+	               {{ log_entry.call_datetime }}
+	            </a>
+	         </li>
+	        {% endfor %}
+	     {% else %}
+			<li>No call log entries</li>
+	     {% endif %}
+	      </ul>
+	</div>
+</div>
+
+<!-- end add call log entry button -->

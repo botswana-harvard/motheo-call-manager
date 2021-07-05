@@ -1,0 +1,65 @@
+{% extends 'edc_base/base.html' %}
+
+{% load static %}
+
+{% block extra-styles %}
+	{{ block.super }}
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css">
+	<link type="text/css" rel="stylesheet" href="{% static 'motheo_call_manager/css/call_log_entry_report.css' %}">
+{% endblock extra-styles %}
+
+{% block extra-scripts %}
+	{{ block.super }}
+	<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+	    	$('#call-logs').DataTable({
+	    		dom: 'Bfrtip',
+	    		buttons: [
+	    			{
+	   			      "extend": 'excel',
+	   			      "text": '<i class="fa fa-file-excel" aria-hidden="true"></i> Excel',
+	   			      'className': 'btn btn-success btn-sm'
+	   			    },
+	   			    {
+	   			    	"extend": 'pdf',
+	     			    "text": '<i class="fa fa-file-pdf" aria-hidden="true"></i> PDF',
+	     			    'className': 'btn btn-info btn-sm'
+	     		}],
+	    		initComplete: function () {
+	                var btns = $('.dt-button');
+	                btns.removeClass('dt-button');
+	    		}
+	    	});
+	    	
+	  /*   	table.buttons().container().appendTo('#example_wrapper .col-sm-6:eq(0)'); */
+		});
+	</script>
+{% endblock extra-scripts %}
+
+
+{% block main %}
+	<div class="row">
+		<div class="row tab" id="tab">
+			<button class="tablinks {% if is_report %} active {% endif %}" onclick="location.href='{{report_url}}?type=report'" type="button">Reports</button>
+	 		<button class="tablinks {% if is_calendar %} active {% endif %}" onclick="location.href='{{report_url}}?type=calendar'" type="button"><i class="fa fa-calendar button"></i> Scheduled Calls</button>
+		</div>
+		{% if is_report %}
+			<div class="row tab-content" id="reports">
+				{% include 'motheo_call_manager/reports/reports.html' %}
+			</div>
+		{% elif is_calendar %}
+			<div class="row tab-content" id="scheduledcalls">
+				{% include 'motheo_call_manager/reports/scheduled_calls.html' %}
+			</div>
+		{% endif %}
+    </div>
+
+{% endblock main %}
