@@ -27,7 +27,8 @@ def call_on_post_save(sender, instance, raw, created, **kwargs):
                             f'{subject_identifier} is due on the '
                             f'{instance.scheduled}. \n \n Good day :).')
 
-            users = User.objects.filter(groups__name__in=['RA'])
+            users = User.objects.filter(groups__name__in=['RA', 'Research Nurse',
+                                                          'Study coordinator'])
             to_emails = [user.email for user in users]
 
             schedule_date = instance.scheduled - relativedelta(days=1)
