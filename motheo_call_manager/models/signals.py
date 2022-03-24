@@ -54,8 +54,6 @@ def delayed_save(instance: CallLogEntry):
         subject_identifier = json['call_subid']
 
         if call_outcome == CONTACTED:
-            import pdb
-            pdb.set_trace()
             instance.subject_identifier = subject_identifier
             instance.call_outcome = call_outcome
             instance.call_attempt_dt = call_attempt_dt
