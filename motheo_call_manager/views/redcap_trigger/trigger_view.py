@@ -1,59 +1,34 @@
+import configparser
+import datetime
+from dateutil.relativedelta import relativedelta
+import os
+
+import requests
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from ...classes import ImportRecordInstance
-from ...models import SubjectLocator
+from ...constants import CONTACTED
+from ...models import SubjectLocator, CallLogEntry
 from ...serializers import SubjectLocatorSerializer
+from edc_call_manager.constants import NO_CONTACT
+from django.conf import settings
 
 
 class TriggerView(APIView):
 
-    import_record_cls = ImportRecordInstance
-
     def post(self, request, *args, **kwargs):
-        data_dict = {}
+        redcap_config = configparser.ConfigParser()
+        redcap_config.read(os.path.join(settings.ETC_DIR, 'motheo_call_manager.ini'))
 
-        if request.method == 'POST':
-            data_dict = request.POST.dict()
-            form_name = data_dict.get('instrument')
-            if form_name == 'locator_form':
-                rs = self.import_record_cls().export_records(
-                    records=[data_dict.get('record'), ], forms=[form_name, ],
-                    raw_or_label='label', export_checkbox_labels=True)
+        record = request.POST.get('record', None)
+        username = request.POST.get('username', None)
+        event_name = request.POST.get('redcap_event_name', None)
 
-                identifier = data_dict.get('record')
+        CallLogEntry.objects.create(
+            subject_identifier=record,
+            user_created=username,
+            event_name=event_name
+        )
 
-                locator_dict = {'subject_identifier': identifier}
-                rs[0].pop('locator_form_complete', None)
-                locator_dict.update(rs[0])
-
-                if self.locator_exists(subject_identifier=identifier):
-                    return self.populate_locator(locator_dict, update=True)
-                return self.populate_locator(locator_dict)
-            return Response({})
-
-    def populate_locator(self, locator_data, update=False):
-        if not update:
-            locator_serializer = SubjectLocatorSerializer(data=locator_data)
-            if locator_serializer.is_valid():
-                locator_serializer.save()
-                return Response(locator_serializer.data, status=status.HTTP_201_CREATED)
-            return Response(locator_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            subject_identifier = locator_data.get('subject_identifier')
-            locator = SubjectLocator.objects.get(subject_identifier=subject_identifier)
-            locator_serializer = SubjectLocatorSerializer(locator, data=locator_data) 
-            if locator_serializer.is_valid():
-                locator_serializer.save()
-                return Response(locator_serializer.data)
-            return Response(locator_serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
-
-    def locator_exists(self, subject_identifier=None):
-        if subject_identifier:
-            try:
-                SubjectLocator.objects.get(subject_identifier=subject_identifier)
-            except SubjectLocator.DoesNotExist:
-                return False
-            else:
-                return True
+        return Response(status=status.HTTP_200_OK)

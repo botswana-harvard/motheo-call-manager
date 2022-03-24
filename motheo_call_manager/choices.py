@@ -1,4 +1,7 @@
 from edc_constants.constants import OTHER
+from edc_call_manager.constants import NO_CONTACT
+
+from .constants import CONTACTED
 
 TEST_TYPES = (
     ('elisa', 'Elisa'),
@@ -18,4 +21,9 @@ OFF_STUDY_REASON = (
     ('unable_to_contact',
      'Unable to contact participant despite repeated attempts (see protocol for definition of Lost to Follow-up)'),
     (OTHER, 'Other'),
+)
+
+CALL_OUTCOME = (
+    (CONTACTED, 'Contact Made'),
+    (NO_CONTACT, 'Contact Made'),
 )

@@ -4,8 +4,13 @@ from edc_model_admin import audit_fieldset_tuple
 
 from .modeladmin_mixins import ModelAdminMixin
 from ..admin_site import motheo_call_manager_admin
-from ..models import Call, Log, LogEntry
-from ..forms import LogEntryForm
+from ..models import Call, Log, LogEntry, CallLogEntry
+from ..forms import LogEntryForm, CallLogEntryForm
+
+
+@admin.register(CallLogEntry, site=motheo_call_manager_admin)
+class CallLogEntryAdmin(ModelAdminMixin, ModelAdminCallMixin, admin.ModelAdmin):
+    pass
 
 
 @admin.register(Call, site=motheo_call_manager_admin)
@@ -20,7 +25,6 @@ class LogAdmin(ModelAdminMixin, admin.ModelAdmin):
 
 @admin.register(LogEntry, site=motheo_call_manager_admin)
 class LogEntryAdmin(ModelAdminMixin, admin.ModelAdmin):
-
     form = LogEntryForm
 
     search_fields = ['study_maternal_identifier']
