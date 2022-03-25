@@ -15,7 +15,7 @@ from ...constants import CONTACTED
 from ...serializers import SubjectLocatorSerializer
 from edc_call_manager.constants import NO_CONTACT
 from django.conf import settings
-from ...cron.email_sender_cron import EmailSenderCron
+from ...cron import EmailSenderCron
 
 
 class EmailSchedularHelper(threading.Thread):
