@@ -1,81 +1,16 @@
-import configparser
-import os
-from time import sleep
-from datetime import datetime, time
-from threading import Thread
-
 import pytz
-import requests
-from django.conf import settings
-from django.contrib.auth.models import User
+from datetime import datetime, time
+from dateutil.relativedelta import relativedelta
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.auth.models import User
+from django.conf import settings
 from django.utils.timezone import make_aware
-from edc_call_manager.constants import NO_CONTACT
-from rest_framework import status
+from edc_base.utils import get_utcnow
 
-from .call_models import *
+from .call_models import Call, LogEntry
 from .home_visit import HomeVisit
 from ..classes import EmailSchedule
-from ..constants import CONTACTED
-
-
-def delayed_save(instance: CallLogEntry):
-    sleep(5)
-    redcap_config = configparser.ConfigParser()
-    redcap_config.read(os.path.join(
-        settings.ETC_DIR, 'motheo_call_manager.ini'))
-    data = {
-        'token': redcap_config['redcap']['token'],
-        'content': 'record',
-        'format': 'json',
-        'type': 'flat',
-        'csvDelimiter': '',
-        'records[0]': instance.subject_identifier,
-        'fields[0]': 'call_attempt_dt',
-        'fields[1]': 'call_outcome',
-        'forms[0]': 'call_log_entry',
-        'events[0]': instance.event_name,
-        'rawOrLabel': 'raw',
-        'rawOrLabelHeaders': 'raw',
-        'exportCheckboxLabel': 'false',
-        'exportSurveyFields': 'false',
-        'exportDataAccessGroups': 'false',
-        'returnFormat': 'json'
-    }
-
-    response = requests.post(settings.REDCAP_API_URL, data=data)
-    if response.status_code == status.HTTP_200_OK:
-        json = response.json()[0]
-        print(json)
-
-        call_outcome = CONTACTED if json['call_outcome'] == '0' else NO_CONTACT
-        call_attempt_dt = json['call_attempt_dt'][:-6]
-        subject_identifier = json['call_subid']
-
-        if call_outcome == CONTACTED:
-            instance.subject_identifier = subject_identifier
-            instance.call_outcome = call_outcome
-            instance.call_attempt_dt = call_attempt_dt
-            instance.next_call = datetime.fromisoformat(
-                call_attempt_dt) + relativedelta(months=3)
-
-            instance.save()
-        else:
-            instance.delete()
-    else:
-        pass
-
-
-@receiver(post_save, weak=False, sender=CallLogEntry,
-          dispatch_uid="call_log_entry_post_save")
-def call_log_entry_post_save(sender, instance, raw, created, **kwargs):
-
-    if instance and not instance.next_call:
-        thread = Thread(name="delayed_save",
-                        target=delayed_save, args=(instance,))
-        thread.setDaemon(True)
-        thread.start()
 
 
 @receiver(post_save, weak=False, sender=Call,
@@ -112,7 +47,7 @@ def log_entry_on_post_save(sender, instance, raw, created, **kwargs):
         log_entries = LogEntry.objects.filter(
             log=instance.log,
             call_datetime__month=instance.call_datetime.month).order_by(
-            '-call_datetime')
+                '-call_datetime')
         if len(log_entries) > 4:
             latest_entries = log_entries[:5]
             if all(entry.contact_type == 'no_contact' for entry in latest_entries):
