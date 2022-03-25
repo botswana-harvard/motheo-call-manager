@@ -2,7 +2,7 @@ from django import forms
 from edc_form_validators import FormValidatorMixin
 
 from ..form_validations import LogEntryFormValidator
-from ..models import LogEntry, CallLogEntry
+from ..models import LogEntry
 
 
 class LogEntryForm(FormValidatorMixin, forms.ModelForm):
@@ -10,10 +10,4 @@ class LogEntryForm(FormValidatorMixin, forms.ModelForm):
 
     class Meta:
         model = LogEntry
-        fields = '__all__'
-
-
-class CallLogEntryForm(FormValidatorMixin, forms.ModelForm):
-    class Meta:
-        model = CallLogEntry
         fields = '__all__'

@@ -4,13 +4,8 @@ from edc_model_admin import audit_fieldset_tuple
 
 from .modeladmin_mixins import ModelAdminMixin
 from ..admin_site import motheo_call_manager_admin
-from ..models import Call, Log, LogEntry, CallLogEntry
-from ..forms import LogEntryForm, CallLogEntryForm
-
-
-@admin.register(CallLogEntry, site=motheo_call_manager_admin)
-class CallLogEntryAdmin(ModelAdminMixin, ModelAdminCallMixin, admin.ModelAdmin):
-    pass
+from ..models import Call, Log, LogEntry
+from ..forms import LogEntryForm
 
 
 @admin.register(Call, site=motheo_call_manager_admin)
