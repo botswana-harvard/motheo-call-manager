@@ -1,59 +1,113 @@
+import configparser
+import datetime
+import threading
+from time import sleep
+from dateutil.relativedelta import relativedelta
+import os
+import pytz
+
+
+import requests
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from ...classes import ImportRecordInstance
-from ...models import SubjectLocator
+from ...constants import CONTACTED
 from ...serializers import SubjectLocatorSerializer
+from edc_call_manager.constants import NO_CONTACT
+from django.conf import settings
+from ...cron import EmailSenderCron
+
+
+class EmailSchedularHelper(threading.Thread):
+    def __init__(self, token, record, event_name):
+        self._token = token
+        self._record = record
+        self._event_name = event_name
+        threading.Thread.__init__(self)
+
+    def run(self):
+        self._schedule_email()
+
+    def _message(self, subject_identitfier):
+        return f"""\
+            Good day 
+
+            {subject_identitfier} call is due tomorrow, please take note.
+
+            Best regards
+
+            Email Motheo Bot
+            """
+
+    def _schedule_email(self):
+
+        sleep(3) # delay to wait for redcap to save form
+
+        data = {
+            'token': self._token,
+            'content': 'record',
+            'format': 'json',
+            'type': 'flat',
+            'csvDelimiter': '',
+            'records[0]': self._record,
+            'fields[0]': 'call_attempt_dt',
+            'fields[1]': 'call_outcome',
+            'forms[0]': 'call_log_entry',
+            'events[0]': self._event_name,
+            'rawOrLabel': 'raw',
+            'rawOrLabelHeaders': 'raw',
+            'exportCheckboxLabel': 'false',
+            'exportSurveyFields': 'false',
+            'exportDataAccessGroups': 'false',
+            'returnFormat': 'json'
+        } # data used to fetch records
+
+        response = requests.post(settings.REDCAP_API_URL, data=data)
+
+        if response.status_code == status.HTTP_200_OK:
+            json = response.json()[0]
+            call_outcome = json['call_outcome']
+            call_attempt_dt = json['call_attempt_dt'][:-6]
+            subject_identifier = json['call_subid']
+
+            if json['call_outcome'] == "0": 
+                # if outcome is succesful its eq to 0
+
+                next_call = None
+
+                if settings.DEBUG:
+                    next_call = datetime.datetime.now() + relativedelta(seconds=3)
+                else:
+                    next_call = datetime.datetime.fromisoformat(
+                        call_attempt_dt) + relativedelta(months=3)
+
+                # schedule a crone job
+                EmailSenderCron(
+                    token=self._token,
+                    next_call_dt=next_call,
+                    title="Follow Up",
+                    message=self._message(subject_identifier)
+                ).schedule_mail()
 
 
 class TriggerView(APIView):
 
-    import_record_cls = ImportRecordInstance
-
     def post(self, request, *args, **kwargs):
-        data_dict = {}
+        redcap_config = configparser.ConfigParser()
+        redcap_config.read(os.path.join(
+            settings.ETC_DIR, 'motheo_call_manager.ini'))
 
-        if request.method == 'POST':
-            data_dict = request.POST.dict()
-            form_name = data_dict.get('instrument')
-            if form_name == 'locator_form':
-                rs = self.import_record_cls().export_records(
-                    records=[data_dict.get('record'), ], forms=[form_name, ],
-                    raw_or_label='label', export_checkbox_labels=True)
+        record = request.POST.get('record', None)
+        event_name = request.POST.get('redcap_event_name', None)
 
-                identifier = data_dict.get('record')
+        thread = EmailSchedularHelper(
+            token=redcap_config['redcap']['token'],
+            record=record,
+            event_name=event_name
+        )
 
-                locator_dict = {'subject_identifier': identifier}
-                rs[0].pop('locator_form_complete', None)
-                locator_dict.update(rs[0])
+        thread.setDaemon(True)
 
-                if self.locator_exists(subject_identifier=identifier):
-                    return self.populate_locator(locator_dict, update=True)
-                return self.populate_locator(locator_dict)
-            return Response({})
+        thread.start()
 
-    def populate_locator(self, locator_data, update=False):
-        if not update:
-            locator_serializer = SubjectLocatorSerializer(data=locator_data)
-            if locator_serializer.is_valid():
-                locator_serializer.save()
-                return Response(locator_serializer.data, status=status.HTTP_201_CREATED)
-            return Response(locator_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            subject_identifier = locator_data.get('subject_identifier')
-            locator = SubjectLocator.objects.get(subject_identifier=subject_identifier)
-            locator_serializer = SubjectLocatorSerializer(locator, data=locator_data) 
-            if locator_serializer.is_valid():
-                locator_serializer.save()
-                return Response(locator_serializer.data)
-            return Response(locator_serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
-
-    def locator_exists(self, subject_identifier=None):
-        if subject_identifier:
-            try:
-                SubjectLocator.objects.get(subject_identifier=subject_identifier)
-            except SubjectLocator.DoesNotExist:
-                return False
-            else:
-                return True
+        return Response(status=status.HTTP_200_OK)

@@ -34,7 +34,8 @@ def call_on_post_save(sender, instance, raw, created, **kwargs):
             schedule_date = instance.scheduled - relativedelta(days=1)
             schedule_time = time(hour=8, minute=30, second=0)
             schedule_datetime = datetime.combine(schedule_date, schedule_time)
-            schedule_datetime = make_aware(schedule_datetime, pytz.timezone(settings.TIME_ZONE))
+            schedule_datetime = make_aware(
+                schedule_datetime, pytz.timezone(settings.TIME_ZONE))
             EmailSchedule().schedule_email(
                 subject, message_data, to_emails, schedule_datetime)
 

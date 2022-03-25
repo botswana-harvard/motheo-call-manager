@@ -20,7 +20,6 @@ class LogAdmin(ModelAdminMixin, admin.ModelAdmin):
 
 @admin.register(LogEntry, site=motheo_call_manager_admin)
 class LogEntryAdmin(ModelAdminMixin, admin.ModelAdmin):
-
     form = LogEntryForm
 
     search_fields = ['study_maternal_identifier']
