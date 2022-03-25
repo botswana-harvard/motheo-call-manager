@@ -16,6 +16,7 @@ from django.core.management.color import color_style
 
 style = color_style()
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -43,12 +44,13 @@ SITE_ID = 1
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'gc2s5qt4g7(&scfo8xqra6wrn0%a!io4)g^yp@*nwa4e1hre7_'
 
-# KEY_PATH = os.path.join(ETC_DIR, 'crypto_fields')
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', 'motheo-test.bhp.org.bw', '127.0.0.1', '10.113.201.212']
+KEY_PATH = os.path.join(ETC_DIR, 'crypto_fields')
+
+ALLOWED_HOSTS = ['localhost', 'motheo-test.bhp.org.bw', '127.0.0.1']
+
 
 # Application definition
 
@@ -73,8 +75,7 @@ INSTALLED_APPS = [
     'motheo_call_manager.apps.EdcFacilityAppConfig',
     'motheo_call_manager.apps.EdcIdentifierAppConfig',
     'motheo_call_manager.apps.EdcProtocolAppConfig',
-    'motheo_call_manager.apps.AppConfig',
-    'django_extensions'
+    'motheo_call_manager.apps.AppConfig'
 ]
 
 MIDDLEWARE = [
@@ -110,6 +111,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'motheo_call_manager.wsgi.application'
 
+
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -128,19 +130,19 @@ DATABASES = {
         'NAME': DB_NAME,
         'USER': DB_USER,
         'PASSWORD': DB_PASSWORD,
-        'HOST': HOST,  # Or an IP Address that your DB is hosted on
+        'HOST': HOST,   # Or an IP Address that your DB is hosted on
         'PORT': PORT,
     }
 }
 
 # Email configurations
 
-# EMAIL_BACKEND = config['email_conf'].get('email_backend')
-# EMAIL_HOST = config['email_conf'].get('email_host')
-# EMAIL_USE_TLS = config['email_conf'].get('email_use_tls')
-# EMAIL_PORT = config['email_conf'].get('email_port')
-# EMAIL_HOST_USER = config['email_conf'].get('email_user')
-# EMAIL_HOST_PASSWORD = config['email_conf'].get('email_host_pwd')
+EMAIL_BACKEND = config['email_conf'].get('email_backend')
+EMAIL_HOST = config['email_conf'].get('email_host')
+EMAIL_USE_TLS = config['email_conf'].get('email_use_tls')
+EMAIL_PORT = config['email_conf'].get('email_port')
+EMAIL_HOST_USER = config['email_conf'].get('email_user')
+EMAIL_HOST_PASSWORD = config['email_conf'].get('email_host_pwd')
 
 # DATABASES = {
 #     'default': {
@@ -166,6 +168,7 @@ Q_CLUSTER = {
     'orm': 'default',
 }
 
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -183,6 +186,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -213,6 +217,7 @@ MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'motheo_call_manager', 'static')
 
+
 if 'test' in sys.argv and 'mysql' not in DATABASES.get('default').get('ENGINE'):
     MIGRATION_MODULES = {
         "django_crypto_fields": None,
@@ -231,6 +236,7 @@ if 'test' in sys.argv:
     PASSWORD_HASHERS = ('django_plainpasswordhasher.PlainPasswordHasher',)
     DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
 
+
 DASHBOARD_URL_NAMES = {
     'call_manager_listboard_url': 'call_manager_listboard_url',
 
@@ -240,5 +246,3 @@ DASHBOARD_BASE_TEMPLATES = {
     'listboard_base_template': 'motheo_call_manager/base.html',
     'call_manager_listboard_template': 'motheo_call_manager/listboard.html',
 }
-
-REDCAP_API_URL = 'https://redcap-dev.bhp.org.bw/api/'
