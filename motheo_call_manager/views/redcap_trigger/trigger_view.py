@@ -36,7 +36,7 @@ class EmailSchedularHelper(threading.Thread):
 
             Best regards
 
-            Motheo Bot
+            Email Motheo Bot
             """
 
     def _schedule_email(self):
