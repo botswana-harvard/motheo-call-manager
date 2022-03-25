@@ -28,11 +28,11 @@ class EmailSchedularHelper(threading.Thread):
     def run(self):
         self._schedule_email()
 
-    def _message(self, subject_identitfier, date: datetime.datetime):
+    def _message(self, subject_identitfier):
         return f"""\
             Good day 
 
-            {subject_identitfier} call is due tomorrow ({date.date()}), please take note.
+            {subject_identitfier} call is due tomorrow, please take note.
 
             Best regards
 

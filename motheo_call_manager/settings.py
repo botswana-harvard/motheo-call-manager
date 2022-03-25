@@ -45,11 +45,11 @@ SITE_ID = 1
 SECRET_KEY = 'gc2s5qt4g7(&scfo8xqra6wrn0%a!io4)g^yp@*nwa4e1hre7_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-KEY_PATH = os.path.join(ETC_DIR, 'crypto_fields')
+# KEY_PATH = os.path.join(ETC_DIR, 'crypto_fields')
 
-ALLOWED_HOSTS = ['localhost', 'motheo-test.bhp.org.bw', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', 'motheo-test.bhp.org.bw', '127.0.0.1', '10.113.201.212']
 
 
 # Application definition
@@ -75,7 +75,8 @@ INSTALLED_APPS = [
     'motheo_call_manager.apps.EdcFacilityAppConfig',
     'motheo_call_manager.apps.EdcIdentifierAppConfig',
     'motheo_call_manager.apps.EdcProtocolAppConfig',
-    'motheo_call_manager.apps.AppConfig'
+    'motheo_call_manager.apps.AppConfig',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
@@ -246,3 +247,6 @@ DASHBOARD_BASE_TEMPLATES = {
     'listboard_base_template': 'motheo_call_manager/base.html',
     'call_manager_listboard_template': 'motheo_call_manager/listboard.html',
 }
+
+
+REDCAP_API_URL = 'https://redcap-dev.bhp.org.bw/api/'
